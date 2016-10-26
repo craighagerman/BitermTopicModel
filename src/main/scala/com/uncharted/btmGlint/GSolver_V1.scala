@@ -15,12 +15,9 @@ import scala.util.Random
 
 
 class GSolver_V1(sc: SparkContext, model: BTMGModel) extends Serializable {
-
     private val waittime = Duration(model.config.akkaWaittime, "seconds")         // ToDo: set the duration value by a BtmConfig parameter?
     private val nz_keys = (0L until model.config.ntopics).toArray
     private val nwz_keys = (0L until model.config.nwordXtopics).toArray
-
-
 
     def initialize(samples: RDD[Biterm]) = {
         val k = model.config.ntopics
@@ -69,7 +66,6 @@ class GSolver_V1(sc: SparkContext, model: BTMGModel) extends Serializable {
         }
     }
 
-
     def mcmcSamplingArray(it:Iterator[Biterm]) = {
         implicit val ec = ExecutionContext.Implicits.global
         // semaphore lock from SimpleLock
@@ -99,8 +95,6 @@ class GSolver_V1(sc: SparkContext, model: BTMGModel) extends Serializable {
         if (!(res1 & res2)) println("ERROR: Error pushing initial values of nz, nwz to PS")
         update.toIterator
     }
-
-
 
     // ---------------------------------------------------------------------------------------------------
     // MCMC Estimatation
@@ -177,9 +171,6 @@ class GSolver_V1(sc: SparkContext, model: BTMGModel) extends Serializable {
         oldRdd.unpersist()
     }
 
-
-
-
     // ---------------------------------------------------------------------------------------------------
     // UTILITY FUNCTIONS (for dev only)                                                 ToDo:  DELETE ME
     // ---------------------------------------------------------------------------------------------------
@@ -190,7 +181,5 @@ class GSolver_V1(sc: SparkContext, model: BTMGModel) extends Serializable {
         val nwz_out = if (n==0) nwz else nwz.slice(0, n)
         (nz, nwz_out)
     }
-
-
 
 }

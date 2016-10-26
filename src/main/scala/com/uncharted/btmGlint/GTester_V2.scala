@@ -20,9 +20,6 @@ import org.apache.spark.rdd.RDD
 
 
 class GTester_V2 {
-
-
-
     def timeit[R](block: => R): R = {
         val t0 = System.nanoTime()
         val result = block    // call-by-name
@@ -30,7 +27,6 @@ class GTester_V2 {
         println("Elapsed time: " + (t1 - t0) / 1000000000.0  + " sec")
         result
     }
-
 
     val islocal = false
     def setup(sc: SparkContext, islocal: Boolean=true) = {

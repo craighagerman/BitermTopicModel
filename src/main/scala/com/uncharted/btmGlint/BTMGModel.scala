@@ -7,12 +7,7 @@ import glint.models.client.BigVector
 import glint.models.client.granular.GranularBigVector
 
 
-
-
-
 class BTMGModel(var globalTopicCounts: BigVector[Long], var granularVector: GranularBigVector[Long], val config: BTMConfig) extends Serializable {
-
-
     def calcTheta(n_biterms: Long, nz: Array[Long], nwz: Array[Long]) = {
         val theta = nz.map(z => (z + config.alpha) / (n_biterms + config.ntopics * config.alpha))
         theta
@@ -26,7 +21,6 @@ class BTMGModel(var globalTopicCounts: BigVector[Long], var granularVector: Gran
         }.toArray
         phi
     }
-
 
     def report_topics(theta: Array[Double], phi:Array[Double], words: Array[String], numWords: Int = 20): Array[(Double, scala.collection.immutable.Seq[String])] = {
         def top_indices(m: Int, z: Int, k: Int) = {
@@ -45,6 +39,8 @@ class BTMGModel(var globalTopicCounts: BigVector[Long], var granularVector: Gran
     }
 
 }
+
+
 
 object BTMGModel {
 

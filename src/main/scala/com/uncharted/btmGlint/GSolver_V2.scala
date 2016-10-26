@@ -1,27 +1,5 @@
 package com.uncharted.btmGlint
 
-/*
-This is the entrance point to glint Parameter Server - based BTM. Run something like this:
-
-    rdd = sc.textFile(...).map(...)
-    val gc = Client(ConfigFactory.parseFile(new java.io.File(configFile)))
-    val btmConfig = new BTMConfig()
-    btmConfig.set_etc(...)
-    val model = Solver.fit(sc, gc, rdd, btmConfig)
-
-
-
-NOTE re: BTMModel
-    glintLDA has _2_ meanings of 'model'
-        (1)  the class that holds pointers to the PS variables
-        (2)  the actual recorder variables themselves (nz, nwz)
-
-    The model holds pointers to globalTopicCounts, granularVector (PS recorders)
-    but also
-
-
- */
-
 
 import java.util.Calendar
 
@@ -39,21 +17,12 @@ import scala.concurrent.{Await, ExecutionContext}
 import scala.util.Random
 
 
-
-
-
-
 object GSolver_V2 {
     private val waittime = Duration(300, "seconds")         // ToDo: set the duration value by a BtmConfig parameter?
 
-    // Solver.fit(sc, gc, rdd, config)
     def fit(sc: SparkContext, gc: Client, samples: RDD[Biterm], config: BTMConfig) = {
-        // transform textRdd to biterms with random k   -- already done? in TextTransformer
-        // set checkpoint dir                           -- already done?
-
         // create Execution Context
         implicit val ec = ExecutionContext.Implicits.global
-//        @transient val client = Client(ConfigFactory.parseFile(new java.io.File(config.psConfigfile)))
 
         // call build, to create/initialize BTM Model
         val model = BTMGModel(gc, config)
@@ -84,7 +53,6 @@ object GSolver_V2 {
     }
 
 
-
     def initialize(samples: RDD[Biterm], model: BTMGModel) = {
         val nz_keys = (0L until model.config.ntopics).toArray
         val nwz_keys = (0L until model.config.nwordXtopics).toArray
@@ -110,20 +78,6 @@ object GSolver_V2 {
         }
         samples.foreachPartition{ case (it) => initSet(it) }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     def mcmcSamplingArray(it:Iterator[Biterm], model: BTMGModel) = {
@@ -157,8 +111,6 @@ object GSolver_V2 {
         if (!(res1 & res2)) println("ERROR: Error pushing initial values of nz, nwz to PS")
         update.toIterator
     }
-
-
 
     // ---------------------------------------------------------------------------------------------------
     // MCMC Estimatation
@@ -212,8 +164,6 @@ object GSolver_V2 {
         a_old zip a_new map{ case( x,y) => y - x}
     }
 
-
-
     // ------------------------------------------------------------------
     // UTILITY METHODS
     // ------------------------------------------------------------------
@@ -246,8 +196,5 @@ object GSolver_V2 {
         val nwz_out = if (n==0) nwz else nwz.slice(0, n)
         (nz, nwz_out)
     }
-
-
-
 
 }

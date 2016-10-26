@@ -4,7 +4,6 @@ case class Biterm(biterm: (Int, Int), var z: Int) extends Serializable
 
 
 class BTMModel(var nz: Array[Long], var nwz: Array[Long], val config: BTMConfig) extends Serializable {
-
     def calcTheta(n_biterms: Long) = {
         val theta = nz.map(z => (z + config.alpha) / (n_biterms + config.ntopics * config.alpha))
         theta
@@ -18,7 +17,6 @@ class BTMModel(var nz: Array[Long], var nwz: Array[Long], val config: BTMConfig)
         }.toArray
         phi
     }
-
 
     def report_topics(theta: Array[Double], phi:Array[Double], words: Array[String], numWords: Int = 20): Array[(Double, scala.collection.immutable.Seq[String])] = {
         def top_indices(m: Int, z: Int, k: Int) = {
@@ -41,13 +39,11 @@ class BTMModel(var nz: Array[Long], var nwz: Array[Long], val config: BTMConfig)
 
 // ---------------------------------------------------------------------------------------------------
 object BTMModel extends Serializable {
-
     def apply(config: BTMConfig) = {
         val nz:Array[Long] = new Array(config.ntopics)
         val nwz:Array[Long] = new Array(config.ntopics * config.nterms)
         new BTMModel(nz, nwz, config)
     }
-
 
 
 }

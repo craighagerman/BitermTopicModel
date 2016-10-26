@@ -2,23 +2,11 @@ package com.uncharted.btmGlint
 
 /*
 This is the entrance point to glint Parameter Server - based BTM. Run something like this:
-
     rdd = sc.textFile(...).map(...)
     val gc = Client(ConfigFactory.parseFile(new java.io.File(configFile)))
     val btmConfig = new BTMConfig()
     btmConfig.set_etc(...)
     val model = Solver.fit(sc, gc, rdd, btmConfig)
-
-
-
-NOTE re: BTMModel
-    glintLDA has _2_ meanings of 'model'
-        (1)  the class that holds pointers to the PS variables
-        (2)  the actual recorder variables themselves (nz, nwz)
-
-    The model holds pointers to globalTopicCounts, granularVector (PS recorders)
-    but also
-
 
  */
 
@@ -43,9 +31,7 @@ abstract class BTIterator(val it: Iterator[Biterm]) extends Iterator[Biterm] {}
 
 
 class GSolver_Iterator(sc: SparkContext, model: BTMGModel) extends Serializable {
-
     private val waittime = Duration(model.config.akkaWaittime, "seconds")
-
 
     def initialize(it: Iterator[Biterm], model: BTMGModel) = {
         val nz_keys = (0L until model.config.ntopics).toArray
@@ -70,9 +56,6 @@ class GSolver_Iterator(sc: SparkContext, model: BTMGModel) extends Serializable 
         }
 
     }
-
-
-
 
     def mcmcSamplingIterator(it:Iterator[Biterm], model: BTMGModel) = {
         val nz_keys = (0L until model.config.ntopics).toArray
@@ -110,17 +93,6 @@ class GSolver_Iterator(sc: SparkContext, model: BTMGModel) extends Serializable 
         }
         results
     }
-
-
-
-
-
-
-
-
-
-
-
 
     // ---------------------------------------------------------------------------------------------------
     // MCMC Estimatation
@@ -173,8 +145,6 @@ class GSolver_Iterator(sc: SparkContext, model: BTMGModel) extends Serializable 
     def computeDelta(a_old: Array[Long], a_new: Array[Long]) = {
         a_old zip a_new map{ case( x,y) => y - x}
     }
-
-
 
     // ------------------------------------------------------------------
     // UTILITY METHODS

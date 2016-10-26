@@ -79,43 +79,6 @@ class GTester_V1 extends Serializable {
     }
 
 
-    /*
-    val g = new G_Tester()
-    //                                                                      (10 files), (50 files, 62056772 biterms, 5 partitions), (50 files, 10 partitions), (100 files, 10 partitions)
-    val (btmConfig, rdd, words) = g.timeit{ setup(sc, false) }              // (10 files, 79.9 sec),
-    g.timeit{ g.run(sc, btmConfig, rdd, words) }                            // (10 files, 139.22 sec), (50 files, 623.92 sec), (50 files, 10 parts, 616.48 sec),  (100 files, 20 parts, 742.74 sec)
-
-
-
-    NOT THIS:
-    --------
-    val rdd = sc.textFile(...).map(...)
-    val gc = Client(ConfigFactory.parseFile(new java.io.File(configFile)))
-    val model = BTMModel(btmConfig)
-    val s = new GSolver(sc, model)
-    s.initialize(rdd)
-    s.fit(rdd)
-
-    BUT THIS:
-    --------
-    val rdd = sc.textFile(...).map(...)
-    val gc = Client(ConfigFactory.parseFile(new java.io.File(configFile)))
-    val btmConfig = new BTMConfig()
-    btmConfig.set_etc(...)
-    val model = Solver.fit(sc, gc, rdd, btmConfig)
-
-    i.e.
-        don't create model (it is done within Solver)
-        call Solver OBJECT, not instantiate a class
-
-
-    */
-
-
-
-
-
-
 
     def run(sc: SparkContext, config:BTMConfig, rdd: RDD[Biterm], words:Array[String]) = {
         val k = config.ntopics

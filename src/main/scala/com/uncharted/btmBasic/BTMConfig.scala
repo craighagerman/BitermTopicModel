@@ -51,9 +51,9 @@ case class BTMConfig(   var alpha: Double = 0.05,
     def setNSamples(nsamples: Int) = this.nsamples = nsamples
     def setNwordXtopics(nwordXtopics:Int) = this.nwordXtopics = nwordXtopics
     def setNBiterms(nbiterms: Option[Long]) = this.nbiterms = nbiterms
+    def setAkkaWaittime(akkaWaittime: Int) = this.akkaWaittime = akkaWaittime
     def setWordpath(wordpath: String) = this.wordpath = wordpath
     def setWorddictpath(worddictpath: String) = this.worddictpath = worddictpath
-    def setAkkaWaittime(akkaWaittime: Int) = this.akkaWaittime = akkaWaittime
     def setStopwordpath(stopwordpath: String) = this.stopwordpath = stopwordpath
     def setCheckpointRead(checkpointRead: String) = this.checkpointRead = checkpointRead
     def setCheckpointSave(checkpointSave: String) = this.checkpointSave = checkpointSave
@@ -65,18 +65,23 @@ case class BTMConfig(   var alpha: Double = 0.05,
 
     override def toString: String = {
         s"""LDAConfig {
-           |    α = $alpha
-           |    β = $beta
+           |    alpha = $alpha
+           |    beta = $beta
+           |    # partitions   = $npartitions
            |    # iterations   = $niterations
            |    # topics       = $ntopics
            |    # words        = $nterms
+           |    words * topics = $nwordXtopics
            |    # biterms      = $nbiterms
-           |    # partitions   = $npartitions
+           |    akka wait time = $akkaWaittime
            |    word path      = $wordpath
            |    worddict path  = $worddictpath
            |    stopword path  = $stopwordpath
-           |    checkpointSave = $checkpointSave
            |    checkpointRead = $checkpointRead
+           |    checkpointSave = $checkpointSave
+           |    checkpointEvery = $checkpointEvery
+           |    PS config file  = $psConfigfile
+           |    local out dir   = $localoutdir
            |}
            """.stripMargin
     }

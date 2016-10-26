@@ -9,41 +9,11 @@ import com.uncharted.btmBasic._
 import com.uncharted.btmGlint._
 import com.uncharted.btmGlint._
 import glintUtil._
-
-
  */
+
 
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-
-/*
- * Copyright © 2013-2015 Uncharted Software Inc.
- *
- * Property of Uncharted™, formerly Oculus Info Inc.
- * http://uncharted.software/
- *
- * Released under the MIT License.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * Created by chagerman on 2016-10-24.
- */
 
 
 class Tester {
@@ -62,11 +32,6 @@ class Tester {
         btmConfig.setStopwordpath(basedir +  "stopwords_all_en.v2.txt")
         btmConfig.setNIterations(5)
 
-
-
-
-        println(btmConfig)
-
         val (words, word_dict, stopwords) = Vocab.loadWords(btmConfig)
         val textRdd = sc.textFile(inpath).map(_.toLowerCase)
         val bitermRdd = TextTransform.transform(textRdd, btmConfig, sc.broadcast(word_dict), sc.broadcast(stopwords) ).cache
@@ -74,15 +39,18 @@ class Tester {
         btmConfig.setNBiterms(Option(nbiterms))
         val biterms = bitermRdd.distinct.collect
 
+        println(btmConfig)
+
+        // create BTM model, run Gibbs sampling estimation
         val model = BTMModel(btmConfig)
         val s = new Solver(sc, model)
         s.initialize(biterms)
         s.fit(biterms)
 
+        // calculate parameters theta, phi & top N words-per-topics
         val theta = model.calcTheta(nbiterms)
         val phi = model.calcPhi()
         val topics = model.report_topics(theta, phi, words, 20)
-
     }
 
 
