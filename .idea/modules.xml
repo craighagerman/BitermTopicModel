@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../TMP/bitermTopicModel/BitermTopicModel.iml" filepath="$PROJECT_DIR$/../TMP/bitermTopicModel/BitermTopicModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bitermTopicModel.iml" filepath="$PROJECT_DIR$/bitermTopicModel.iml" />
+    </modules>
+  </component>
+</project>
